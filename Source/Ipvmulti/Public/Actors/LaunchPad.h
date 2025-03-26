@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "LaunchPad.generated.h"
 
+class UBoxComponent;
 UCLASS()
 class IPVMULTI_API ALaunchPad : public AActor
 {
@@ -19,6 +20,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(VisibleDefaultsOnly, Category= "Components")
+	UStaticMeshComponent* MeshComp;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UBoxComponent* OverlaComp;
+
+	//void OverlapLaunchPad();
+	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
