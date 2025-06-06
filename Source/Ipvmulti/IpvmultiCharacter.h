@@ -44,8 +44,12 @@ class AIpvmultiCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* FireAction;
+
 public:
 	AIpvmultiCharacter();
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	
 
 protected:
@@ -68,5 +72,79 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	
+	UFUNCTION(BlueprintPure, Category="Health")
+	FORCEINLINE float GetMaxHealth() const { return MaxHealth; }
+
+	UFUNCTION(BlueprintPure, Category="Bullet")
+	FORCEINLINE float GetBullet() const { return CurrentBullet; }
+ 
+	
+	UFUNCTION(BlueprintPure, Category="Health")
+	FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
+ 
+	
+	UFUNCTION(BlueprintCallable, Category="Health")
+	void SetCurrentHealth(float healthValue);
+	
+	UFUNCTION(BlueprintCallable, Category="Bullet")
+	void AddAmmo();
+
+	UFUNCTION(BlueprintCallable, Category="Bullet")
+	void SetCurrentBullet();
+	
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	float TakeDamage( float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser ) override;
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Health")
+	float MaxHealth;
+	
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentHealth)
+	float CurrentHealth;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Bullet")
+	float MaxBullet;
+
+	UPROPERTY(ReplicatedUsing = OnRep_CurrentBullet)
+	float CurrentBullet;
+
+	UPROPERTY(EditDefaultsOnly, Category="Gameplay|Projectile")
+	TSubclassOf<class AThirdPersonMPProjectile> ProjectileClass;
+ 
+	/** Delay between shots in seconds. Used to control fire rate for your test projectile, but also to prevent an overflow of server functions from binding SpawnProjectile directly to input.*/
+	UPROPERTY(EditDefaultsOnly, Category="Gameplay")
+	float FireRate;
+ 
+	/** If true, you are in the process of firing projectiles. */
+	bool bIsFiringWeapon;
+ 
+	/** Function for beginning weapon fire.*/
+	UFUNCTION(BlueprintCallable, Category="Gameplay")
+	void StartFire();
+ 
+	/** Function for ending weapon fire. Once this is called, the player can use StartFire again.*/
+	UFUNCTION(BlueprintCallable, Category = "Gameplay")
+	void StopFire();
+ 
+	/** Server function for spawning projectiles.*/
+	UFUNCTION(Server, Reliable)
+	void HandleFire();
+ 
+	/** A timer handle used for providing the fire rate delay in-between spawns.*/
+	FTimerHandle FiringTimer;
+	
+	UFUNCTION()
+	void OnRep_CurrentHealth();
+
+	UFUNCTION()
+	void OnRep_CurrentBullet();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Health")
+	void OnHealthUpdate();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Bullet")
+	void OnBulletUpdate();
 };
 
