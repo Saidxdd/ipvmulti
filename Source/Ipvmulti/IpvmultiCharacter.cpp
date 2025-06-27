@@ -13,6 +13,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/Engine.h"
 #include "ThirdPersonMPProjectile.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -125,16 +126,14 @@ void AIpvmultiCharacter::SetCurrentHealth(float healthValue)
 void AIpvmultiCharacter::AddAmmo()
 {
 	CurrentBullet=5.f;
-	FString BulletMessage = FString::Printf(TEXT("You now have %f Bullets remaining."), CurrentBullet);
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, BulletMessage);
+	
 	OnBulletUpdate();
 }
 
 void AIpvmultiCharacter::SetCurrentBullet()
 {
 		CurrentBullet = CurrentBullet-1.f;
-		FString BulletMessage = FString::Printf(TEXT("You now have %f Bullets remaining."), CurrentBullet);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, BulletMessage);
+		
 		OnBulletUpdate();
 }
 
@@ -144,6 +143,19 @@ float AIpvmultiCharacter::TakeDamage(float DamageTaken, struct FDamageEvent cons
 	SetCurrentHealth(damageApplied);
 	return damageApplied;
 }
+
+void AIpvmultiCharacter::OpenLobby()
+{
+	UWorld* World = GetWorld();
+	if (World) return;
+	World->ServerTravel("Game/ThirdPerson/Maps/Lobby.Lobby?Listen");
+}
+
+void AIpvmultiCharacter::CallOpenLevel(const FString& IPAndress)
+{
+	UGameplayStatics::OpenLevel(this, *IPAndress);
+}
+
 
 void AIpvmultiCharacter::StartFire()
 {

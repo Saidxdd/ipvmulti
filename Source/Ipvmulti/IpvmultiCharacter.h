@@ -97,6 +97,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Health")
 	float TakeDamage( float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser ) override;
 
+	UFUNCTION(BlueprintCallable)
+	void OpenLobby();
+
+	UFUNCTION(BlueprintCallable)
+	void CallOpenLevel(const FString& IPAndress);
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	float MaxHealth;
