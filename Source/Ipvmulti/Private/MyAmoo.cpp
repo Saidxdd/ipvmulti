@@ -1,7 +1,7 @@
 
 #include "MyAmoo.h"
 #include "Components/BoxComponent.h"
-#include "Ipvmulti/IpvmultiCharacter.h"
+#include "Actors/IpvmultiCharacter.h"
 
 
 AMyAmoo::AMyAmoo()

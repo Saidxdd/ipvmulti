@@ -13,6 +13,19 @@ class AIpvmultiGameMode : public AGameModeBase
 
 public:
 	AIpvmultiGameMode();
+
+	void CompleteMission(APawn* Pawn);
+
+	UFUNCTION(BlueprintImplementableEvent, category = "GameMode")
+	void OnMissionCompleted(APawn* Pawn);
+
+	
+	
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> SpectatorViewClass;
+
+	
 };
 
 

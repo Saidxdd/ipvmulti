@@ -1,6 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "IpvmultiCharacter.h"
+#include "Actors/IpvmultiCharacter.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -54,7 +54,7 @@ AIpvmultiCharacter::AIpvmultiCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
-	MaxHealth = 100.0f;
+	MaxHealth = 20.0f;
 	MaxBullet = 5.0f;
 	CurrentHealth = MaxHealth;
 	CurrentBullet = MaxBullet;
@@ -118,7 +118,7 @@ void AIpvmultiCharacter::SetCurrentHealth(float healthValue)
 {
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		CurrentHealth = FMath::Clamp(healthValue, 0.f, MaxHealth);
+		CurrentHealth = CurrentHealth-healthValue;
 		OnHealthUpdate();
 	}
 }
@@ -139,7 +139,7 @@ void AIpvmultiCharacter::SetCurrentBullet()
 
 float AIpvmultiCharacter::TakeDamage(float DamageTaken, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	float damageApplied = CurrentHealth - DamageTaken;
+	float damageApplied = DamageTaken;
 	SetCurrentHealth(damageApplied);
 	return damageApplied;
 }

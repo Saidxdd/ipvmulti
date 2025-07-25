@@ -102,11 +102,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CallOpenLevel(const FString& IPAndress);
+
+	UPROPERTY(BlueprintReadOnly, Category="Objective")
+	bool bIsCarryingObejective;
+
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	float MaxHealth;
 	
-	UPROPERTY(ReplicatedUsing = OnRep_CurrentHealth)
+	UPROPERTY(BlueprintReadWrite,ReplicatedUsing = OnRep_CurrentHealth)
 	float CurrentHealth;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Bullet")
