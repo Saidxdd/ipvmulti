@@ -59,7 +59,6 @@ AThirdPersonMPProjectile::AThirdPersonMPProjectile()
 void AThirdPersonMPProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void AThirdPersonMPProjectile::Destroyed()

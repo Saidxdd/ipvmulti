@@ -207,7 +207,7 @@ void AIpvmultiCharacter::OnHealthUpdate_Implementation()
 	{
 		FString healthMessage = FString::Printf(TEXT("You now have %f health remaining."), CurrentHealth);
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, healthMessage);
- 
+		
 		if (CurrentHealth <= 0)
 		{
 			FString deathMessage = FString::Printf(TEXT("You have been killed."));

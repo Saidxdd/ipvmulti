@@ -79,7 +79,6 @@ public:
 
 	UFUNCTION(BlueprintPure, Category="Bullet")
 	FORCEINLINE float GetBullet() const { return CurrentBullet; }
- 
 	
 	UFUNCTION(BlueprintPure, Category="Health")
 	FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
